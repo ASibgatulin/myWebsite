@@ -5,12 +5,8 @@ from dotenv import load_dotenv
 load_dotenv()
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # Опционально: можно добавить проверку, что ключ действительно получен
-if not SECRET_KEY:
-    raise ValueError("DJANGO_SECRET_KEY не задан в переменных окружения!")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = 'django-insecure-change-this-in-production-12345'  # Потом сменю или сделаю гитигнор если не забуду) 21.05.26
 
 DEBUG = True
 ALLOWED_HOSTS = ['*']

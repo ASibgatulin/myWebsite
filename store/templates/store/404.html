@@ -1,0 +1,9 @@
+{% extends 'store/base.html' %}
+{% block title %}Страница не найдена{% endblock %}
+{% block content %}
+<div style="text-align:center; padding:50px;">
+    <h1>404</h1>
+    <p>Запрашиваемая страница не существует.</p>
+    <p>Вернитесь на <a href="{% url 'home' %}">главную</a> или посетите <a href="{% url 'catalog' %}">каталог</a>.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'store/base.html' %}
+{% block title %}{{ category.name }}{% endblock %}
+{% block content %}
+<h1>{{ category.name }}</h1>
+<div class="products-grid">
+    {% for product in products %}
+        <div class="product-card">
+            <a href="{% url 'product_detail' category.slug product.pk %}">
+                {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
+                <h3>{{ product.name }}</h3>
+            </a>
+            <p class="price">{{ product.price }} руб.</p>
+        </div>
+    {% empty %}
+        <p>В этой категории пока нет товаров.</p>
+    {% endfor %}
+</div>
+<a href="{% url 'catalog' %}">← Назад к каталогу</a>
+{% endblock %}

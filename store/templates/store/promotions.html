@@ -1,0 +1,15 @@
+{% extends 'store/base.html' %}
+{% block title %}Акции{% endblock %}
+{% block content %}
+<h1>Акции</h1>
+{% for promo in promotions %}
+    <div class="promo-item">
+        {% if promo.image %}<img src="{{ promo.image.url }}" alt="{{ promo.title }}">{% endif %}
+        <h2>{{ promo.title }}</h2>
+        <p>{{ promo.description }}</p>
+        <small>Срок действия: {{ promo.start_date }} – {{ promo.end_date }}</small>
+    </div>
+{% empty %}
+    <p>В данный момент акций нет.</p>
+{% endfor %}
+{% endblock %}

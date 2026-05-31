@@ -1,0 +1,10 @@
+{% extends 'store/base.html' %}
+{% block title %}Карта сайта{% endblock %}
+{% block content %}
+<h1>Карта сайта</h1>
+<ul>
+{% for item in urls %}
+    <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

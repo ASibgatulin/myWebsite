@@ -1,0 +1,14 @@
+{% extends 'store/base.html' %}
+{% block title %}Наши магазины{% endblock %}
+{% block content %}
+<h1>Магазины</h1>
+{% for store in stores %}
+    <div class="store-item">
+        <h3>{{ store.city }}, {{ store.address }}</h3>
+        <p>Телефон: {{ store.phone }}</p>
+        <p>Режим работы: {{ store.work_time }}</p>
+    </div>
+{% empty %}
+    <p>Информация о магазинах скоро появится.</p>
+{% endfor %}
+{% endblock %}

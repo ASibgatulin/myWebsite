@@ -1,0 +1,15 @@
+{% extends 'store/base.html' %}
+{% block title %}Каталог товаров{% endblock %}
+{% block content %}
+<h1>Каталог</h1>
+<div class="categories-grid">
+    {% for cat in categories %}
+        <a href="{% url 'category_detail' cat.slug %}" class="category-card">
+            {% if cat.image %}<img src="{{ cat.image.url }}" alt="{{ cat.name }}">{% endif %}
+            <span>{{ cat.name }}</span>
+        </a>
+    {% empty %}
+        <p>Категорий пока нет.</p>
+    {% endfor %}
+</div>
+{% endblock %}

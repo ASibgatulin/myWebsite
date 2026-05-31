@@ -1,0 +1,11 @@
+{% extends 'store/base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<div class="product-detail">
+    {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
+    <h1>{{ product.name }}</h1>
+    <p class="price">{{ product.price }} руб.</p>
+    <p>{{ product.description }}</p>
+    <a href="{% url 'category_detail' product.category.slug %}">← Назад в {{ product.category.name }}</a>
+</div>
+{% endblock %}

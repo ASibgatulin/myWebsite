@@ -1,0 +1,25 @@
+{% extends 'store/base.html' %}
+{% block title %}Главная - Домашний Уют{% endblock %}
+{% block content %}
+<h1>Добро пожаловать в Домашний Уют</h1>
+<div class="promo-slider">
+    {% for promo in promotions %}
+        <div class="promo-item">
+            {% if promo.image %}<img src="{{ promo.image.url }}" alt="{{ promo.title }}">{% endif %}
+            <h2>{{ promo.title }}</h2>
+            <p>{{ promo.description }}</p>
+        </div>
+    {% empty %}
+        <p>Сейчас нет активных акций.</p>
+    {% endfor %}
+</div>
+<h2>Популярные категории</h2>
+<div class="categories-grid">
+    {% for cat in categories %}
+        <a href="{% url 'category_detail' cat.slug %}" class="category-card">
+            {% if cat.image %}<img src="{{ cat.image.url }}" alt="{{ cat.name }}">{% endif %}
+            <span>{{ cat.name }}</span>
+        </a>
+    {% endfor %}
+</div>
+{% endblock %}

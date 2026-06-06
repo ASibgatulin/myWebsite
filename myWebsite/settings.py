@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-# Опционально: можно добавить проверку, что ключ действительно получен
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 

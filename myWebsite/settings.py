@@ -8,6 +8,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = True
+
+ADMIN_EMAIL = '70213161@online.muiv.ru'
+DEFAULT_FROM_EMAIL = '70213161@online.muiv.ru'
+
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -44,6 +48,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'store.context_processors.theme_context',
+                'store.context_processors.banners_context',
             ],
         },
     },

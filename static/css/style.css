@@ -21,3 +21,23 @@ footer a { color: #F9F6F0; }
 .category-card, .product-card { border: 1px solid #ddd; padding: 10px; background: white; text-align: center; }
 .product-card img, .category-card img { max-width: 100%; height: auto; }
 .price { font-weight: bold; color: #8B5E3C; }
+
+.article-item {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+.article-thumb {
+    max-width: 200px;
+    float: left;
+    margin-right: 15px;
+}
+.article-img {
+    max-width: 100%;
+    height: auto;
+    margin: 15px 0;
+}
+.date {
+    color: #666;
+    font-size: 0.9em;
+}

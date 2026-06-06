@@ -2,6 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView
 from django.urls import URLPattern, URLResolver, get_resolver
 from .models import Category, Product, Store, Promotion
+from django.db.models import Q
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from .models import Article, Banner, ContactMessage
+from .forms import ContactForm
+from .forms import SearchForm
 
 class HomeView(TemplateView):
     template_name = 'store/home.html'
@@ -10,6 +20,8 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()[:6]
         context['promotions'] = Promotion.objects.filter(is_active=True)[:3]
+        context['latest_articles'] = Article.objects.filter(is_published=True)[:5]
+        context['search_form'] = SearchForm()
         return context
 
 class CatalogView(ListView):
@@ -78,6 +90,76 @@ class SitemapView(TemplateView):
         extract_urls(get_resolver().url_patterns)
         context['urls'] = urls
         return context
+
+class ArticleListView(ListView):
+    model = Article
+    template_name = 'store/article_list.html'
+    context_object_name = 'articles'
+    paginate_by = 6
+
+    def get_queryset(self):
+        return Article.objects.filter(is_published=True)
+
+class ArticleDetailView(DetailView):
+    model = Article
+    template_name = 'store/article_detail.html'
+    context_object_name = 'article'
+
+class SearchView(ListView):
+    template_name = 'store/search_results.html'
+    context_object_name = 'results'
+    paginate_by = 10
+
+    def get_queryset(self):
+        query = self.request.GET.get('q', '')
+        if query:
+            # Поиск
+            products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query), available=True)
+            articles = Article.objects.filter(Q(title__icontains=query) | Q(content__icontains=query), is_published=True)
+
+            results = list(products) + list(articles)
+
+            for item in results:
+                item.type = 'product' if isinstance(item, Product) else 'article'
+            return results
+        return []
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        return context
+
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            msg = form.save()
+            # мыло админу
+            send_mail(
+                f'Новое сообщение от {msg.name}',
+                f'Email: {msg.email}\nТелефон: {msg.phone}\n\n{msg.message}',
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.ADMIN_EMAIL],
+                fail_silently=True,
+            )
+            return redirect('contact_success')
+    else:
+        form = ContactForm()
+    return render(request, 'store/contact.html', {'form': form})
+
+def contact_success(request):
+    return render(request, 'store/contact_success.html')
+
+class RegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'store/register.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        UserProfile.objects.create(user=self.object)
+        return response
 
 def custom_404(request, exception):
     return render(request, 'store/404.html', status=404)

@@ -22,4 +22,5 @@ urlpatterns = [
     path('search/', SearchView.as_view(), name='search'),
     path('articles/', ArticleListView.as_view(), name='articles'),
     path('articles/<slug:slug>/', ArticleDetailView.as_view(), name='article_detail'),
+
 ]

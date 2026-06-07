@@ -150,6 +150,11 @@ def contact_view(request):
 def contact_success(request):
     return render(request, 'store/contact_success.html')
 
+
+class UserProfile:
+    pass
+
+
 class RegisterView(CreateView):
     form_class = UserCreationForm
     template_name = 'store/register.html'

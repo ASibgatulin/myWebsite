@@ -3,10 +3,6 @@
 {% block content %}
 <h1>Каталог</h1>
     
-<form action="{% url 'search' %}" method="get" class="search-form">
-    {{ search_form.q }}
-    <button type="submit">Найти</button>
-</form>    
 <div class="categories-grid">
     {% for cat in categories %}
         <a href="{% url 'category_detail' cat.slug %}" class="category-card">

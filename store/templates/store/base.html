@@ -10,50 +10,52 @@
     {% else %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% endif %}
-    
-    {% if user.is_authenticated %}
-            <li><a href="{% url 'profile' %}">Привет, {{ user.username }}</a></li>
-            <li><a href="{% url 'logout' %}">Выйти</a></li>
-        {% else %}
-            <li><a href="{% url 'login' %}">Войти</a></li>
-            <li><a href="{% url 'register' %}">Регистрация</a></li>
-        {% endif %}
 </head>
 <body>
     <header>
         <div class="container">
             <a href="{% url 'home' %}" class="logo">Домашний Уют</a>
-            
             <a href="{% url 'toggle_theme' %}" class="theme-toggle">
                 {% if theme == 'vi' %}Обычная версия{% else %}Версия для слабовидящих{% endif %}
             </a>
         </div>
     </header>
+    
+    <div class="search-container container">
+        <form action="{% url 'search' %}" method="get" class="search-form">
+            <input type="text" name="q" placeholder="Поиск товаров и статей" value="{{ request.GET.q }}">
+            <button type="submit">Найти</button>
+        </form>
+    </div>
+    
+    <nav class="main-nav">
+        <div class="container">
+            <ul>
+                <li><a href="{% url 'catalog' %}">Каталог</a></li>
+                <li><a href="{% url 'articles' %}">Статьи</a></li>
+                <li><a href="{% url 'promotions' %}">Акции</a></li>
+                <li><a href="{% url 'about' %}">О нас</a></li>
+                <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                <li><a href="{% url 'sitemap' %}">Карта сайта</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'profile' %}">Привет, {{ user.username }}</a></li>
+                    <li><a href="{% url 'logout' %}">Выйти</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Войти</a></li>
+                    <li><a href="{% url 'register' %}">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
     <main class="container">
         {% block content %}{% endblock %}
     </main>
-    
-</body>
 
-<form action="{% url 'search' %}" method="get" class="search-form">
-    <input type="text" name="q" placeholder="Поиск товаров и статей" value="{{ request.GET.q }}">
-    <button type="submit">Найти</button>
-</form>
-
-</form> 
-<ul>
-        <li><a href="/catalog/">Каталог</a></li>
-        <li><a href="/articles/">Статьи</a></li>
-        <li><a href="/stores/">Магазины</a></li>
-        <li><a href="/promotions/">Акции</a></li>
-        <li><a href="/about/">О нас</a></li>
-        <li><a href="/contacts/">Контакты</a></li>
-        
-    </ul>
-
-<footer>
+    <footer>
         <div class="container">
             <p>&copy; 2026 Домашний Уют. Все адреса магазинов на странице <a href="{% url 'stores' %}">Магазины</a></p>
         </div>
     </footer>
+</body>
 </html>

@@ -4,6 +4,7 @@ from django.contrib.auth import views as auth_views
 from .views import RegisterView
 from .views import SearchView
 from .views import ArticleListView, ArticleDetailView
+from .views import profile_view
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -22,5 +23,6 @@ urlpatterns = [
     path('search/', SearchView.as_view(), name='search'),
     path('articles/', ArticleListView.as_view(), name='articles'),
     path('articles/<slug:slug>/', ArticleDetailView.as_view(), name='article_detail'),
+    path('profile/', profile_view, name='profile'),
 
 ]

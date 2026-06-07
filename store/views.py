@@ -12,6 +12,8 @@ from django.views.generic.edit import CreateView
 from .models import Article, Banner, ContactMessage
 from .forms import ContactForm
 from .forms import SearchForm
+from .models import UserProfile
+from .forms import UserForm, ProfileForm
 
 class HomeView(TemplateView):
     template_name = 'store/home.html'
@@ -150,11 +152,8 @@ def contact_view(request):
 def contact_success(request):
     return render(request, 'store/contact_success.html')
 
-
 class UserProfile:
     pass
-
-
 class RegisterView(CreateView):
     form_class = UserCreationForm
     template_name = 'store/register.html'
@@ -165,6 +164,21 @@ class RegisterView(CreateView):
 
         UserProfile.objects.create(user=self.object)
         return response
+
+@login_required
+def profile_view(request):
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('profile')
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=profile)
+    return render(request, 'store/profile.html', {'user_form': user_form, 'profile_form': profile_form})
 
 def custom_404(request, exception):
     return render(request, 'store/404.html', status=404)

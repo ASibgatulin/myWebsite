@@ -152,19 +152,6 @@ def contact_view(request):
 def contact_success(request):
     return render(request, 'store/contact_success.html')
 
-class UserProfile:
-    pass
-class RegisterView(CreateView):
-    form_class = UserCreationForm
-    template_name = 'store/register.html'
-    success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-
-        UserProfile.objects.create(user=self.object)
-        return response
-
 @login_required
 def profile_view(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -180,5 +167,17 @@ def profile_view(request):
         profile_form = ProfileForm(instance=profile)
     return render(request, 'store/profile.html', {'user_form': user_form, 'profile_form': profile_form})
 
+class RegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'store/register.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        UserProfile.objects.create(user=self.object)
+        return response
+
 def custom_404(request, exception):
     return render(request, 'store/404.html', status=404)
+

@@ -78,19 +78,78 @@ class SitemapView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        urls = []
-        def extract_urls(urlpatterns, prefix=''):
-            for pattern in urlpatterns:
-                if isinstance(pattern, URLResolver):
-                    extract_urls(pattern.url_patterns, prefix + str(pattern.pattern))
-                elif isinstance(pattern, URLPattern):
-                    if pattern.name and 'admin' not in prefix:
-                        urls.append({
-                            'name': pattern.name,
-                            'url': '/' + prefix + str(pattern.pattern).replace('^', '').replace('$', '')
-                        })
-        extract_urls(get_resolver().url_patterns)
-        context['urls'] = urls
+        # Ручное построение дерева страниц (можно расширить)
+        sitemap_tree = [
+            {
+                'title': 'Главная',
+                'url': 'home',
+                'children': []
+            },
+            {
+                'title': 'Каталог',
+                'url': 'catalog',
+                'children': [
+                    {'title': 'Мягкая мебель', 'url': 'category_detail', 'slug': 'myagkaya-mebel', 'children': []},
+                    {'title': 'Посуда', 'url': 'category_detail', 'slug': 'posuda', 'children': []},
+                    {'title': 'Хранение', 'url': 'category_detail', 'slug': 'khranenie', 'children': []},
+                    {'title': 'Товары для клининга', 'url': 'category_detail', 'slug': 'cleaning', 'children': []},
+                ]
+            },
+            {
+                'title': 'Статьи',
+                'url': 'articles',
+                'children': []
+            },
+            {
+                'title': 'Магазины',
+                'url': 'stores',
+                'children': []
+            },
+            {
+                'title': 'Акции',
+                'url': 'promotions',
+                'children': []
+            },
+            {
+                'title': 'О нас',
+                'url': 'about',
+                'children': []
+            },
+            {
+                'title': 'Контакты',
+                'url': 'contacts',
+                'children': []
+            },
+            {
+                'title': 'Карта сайта',
+                'url': 'sitemap',
+                'children': []
+            },
+            {
+                'title': 'Поиск',
+                'url': 'search',
+                'children': []
+            },
+            {
+                'title': 'Вход / Регистрация',
+                'url': 'login',
+                'children': [
+                    {'title': 'Войти', 'url': 'login', 'children': []},
+                    {'title': 'Зарегистрироваться', 'url': 'register', 'children': []},
+                ]
+            },
+            {
+                'title': 'Личный кабинет',
+                'url': 'profile',
+                'children': []
+            },
+            {
+                'title': 'Версия для слабовидящих',
+                'url': 'toggle_theme',
+                'children': []
+            },
+        ]
+        context['sitemap'] = sitemap_tree
         return context
 
 class ArticleListView(ListView):

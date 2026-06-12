@@ -1,0 +1,10 @@
+{% extends 'store/base.html' %}
+{% block title %}Сообщение отправлено{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px;">
+    <h1>Спасибо!</h1>
+    <p>Ваше сообщение отправлено. Мы свяжемся с Вами.</p>
+    <a href="{% url 'home' %}" class="btn">Вернуться на главную</a>
+</div>
+{% endblock %}

@@ -5,6 +5,7 @@ from .views import RegisterView
 from .views import SearchView
 from .views import ArticleListView, ArticleDetailView
 from .views import profile_view
+from .views import contact_view, contact_success
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -17,12 +18,14 @@ urlpatterns = [
     path('stores/', views.StoreListView.as_view(), name='stores'),
     path('promotions/', views.PromotionListView.as_view(), name='promotions'),
     path('about/', views.AboutView.as_view(), name='about'),
-    path('contacts/', views.ContactsView.as_view(), name='contacts'),
+    path('contacts/', views.contact_view, name='contacts'),
     path('sitemap/', views.SitemapView.as_view(), name='sitemap'),
     path('toggle-theme/', views.toggle_theme, name='toggle_theme'),
     path('search/', SearchView.as_view(), name='search'),
     path('articles/', ArticleListView.as_view(), name='articles'),
     path('articles/<slug:slug>/', ArticleDetailView.as_view(), name='article_detail'),
     path('profile/', profile_view, name='profile'),
+    path('contact/', contact_view, name='contact'),
+    path('contact/success/', contact_success, name='contact_success'),
 
 ]

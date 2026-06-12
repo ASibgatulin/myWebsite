@@ -68,10 +68,10 @@ class AboutView(TemplateView):
 class ContactsView(TemplateView):
     template_name = 'store/contacts.html'
 
-def toggle_theme(request):
-    current = request.session.get('theme', 'default')
-    request.session['theme'] = 'vi' if current == 'default' else 'default'
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+    def toggle_theme(request):
+        current = request.session.get('theme', 'default')
+        request.session['theme'] = 'vi' if current == 'default' else 'default'
+        return redirect(request.META.get('HTTP_REFERER', '/'))
 
 class SitemapView(TemplateView):
     template_name = 'store/sitemap.html'
@@ -189,28 +189,6 @@ class SearchView(ListView):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q', '')
         return context
-
-def contact_view(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            msg = form.save()
-            # мыло админу
-            send_mail(
-                f'Новое сообщение от {msg.name}',
-                f'Email: {msg.email}\nТелефон: {msg.phone}\n\n{msg.message}',
-                settings.DEFAULT_FROM_EMAIL,
-                [settings.ADMIN_EMAIL],
-                fail_silently=True,
-            )
-            return redirect('contact_success')
-    else:
-        form = ContactForm()
-    return render(request, 'store/contact.html', {'form': form})
-
-def contact_success(request):
-    return render(request, 'store/contact_success.html')
-
 @login_required
 def profile_view(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
@@ -239,4 +217,22 @@ class RegisterView(CreateView):
 
 def custom_404(request, exception):
     return render(request, 'store/404.html', status=404)
+
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('contact_success')
+    else:
+        form = ContactForm()
+    return render(request, 'store/contact.html', {'form': form})
+
+def contact_success(request):
+    return render(request, 'store/contact_success.html')
+
+def toggle_theme(request):
+    current = request.session.get('theme', 'default')
+    request.session['theme'] = 'vi' if current == 'default' else 'default'
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
